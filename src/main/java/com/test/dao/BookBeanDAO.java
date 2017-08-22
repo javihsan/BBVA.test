@@ -1,10 +1,12 @@
 package com.test.dao;
 
-import com.googlecode.objectify.ObjectifyService;
-import com.test.data.BookBean;
-
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
+
+import com.googlecode.objectify.ObjectifyService;
+import com.googlecode.objectify.cmd.Query;
+import com.test.data.BookBean;
 
 /**
  * @author BBVA Test
@@ -15,16 +17,37 @@ public class BookBeanDAO {
     private static final Logger LOGGER = Logger.getLogger(BookBeanDAO.class.getName());
 
     /**
-     * @return list of test beans
+     * No es posible hacer un ignoreCase en las querys al Datastore.
+     * No es posible hacer un % like (endsWith). 
+     * Se puede simular un like % (startsWith): q.filter("author >=", searchText).filter("author <",searchText + "\uFFFD").
+     * Pero implicaría hacerlo solo en un campo (necesitamos name y author), de lo contrario se da una Exception "Only one inequality filter per query is supported".
+     * Asi que  haremos los filtros ignoreCase y % like % por java, recorriendo la lista y quitando los que no cumplan 
+     * @param searchText
+     * @return list of book beans filter by searchText order by author
      */
-    public List<BookBean> list() {
-        LOGGER.info("Retrieving list of beans");
-        return ObjectifyService.ofy().load().type(BookBean.class).list();
+    public List<BookBean> list(String searchText) {
+        LOGGER.info("Retrieving list of beans filter by '" + searchText + "' order by author");
+        
+        List<BookBean> list = ObjectifyService.ofy().load().type(BookBean.class).order("author").list();
+      
+        if (searchText!=null){
+        	List<BookBean> listResult = new ArrayList<BookBean>();
+        	searchText = searchText.toLowerCase();
+        	for (BookBean bookBean : list) {
+        		if(bookBean.getName().toLowerCase().contains(searchText)
+        				|| bookBean.getAuthor().toLowerCase().contains(searchText)){
+        			listResult.add(bookBean);
+        		}
+        	}
+        	return listResult;
+        } 
+		        
+        return list;
     }
-
+    
     /**
      * @param id
-     * @return test bean with given id
+     * @return book bean with given id
      */
     public BookBean get(Long id) {
         LOGGER.info("Retrieving bean " + id);

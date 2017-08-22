@@ -3,6 +3,7 @@ package com.test.data;
 import com.googlecode.objectify.annotation.Cache;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.Index;
 import com.wordnik.swagger.annotations.ApiModel;
 
 /**
@@ -19,8 +20,10 @@ public class BookBean {
     @Id
     private Long id;
 
+    @Index
     private String name;
     
+    @Index
     private String author;
     
     private Integer yearPub;
