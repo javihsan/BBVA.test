@@ -14,14 +14,18 @@ import com.wordnik.swagger.annotations.ApiModel;
 @ApiModel("Book object")
 public class BookBean {
 
+	public enum Genre { EPICA, CUENTO, NOVELA, TRAGEDIA, COMEDIA, CRONICA, BIOGRAFIA, FABULA, ENSAYO, ROMANCE}
+	
     @Id
     private Long id;
 
     private String name;
     
+    private String author;
+    
     private Integer yearPub;
     
-    private String genre;
+    private Genre genre;
 
     public Long getId() {
         return id;
@@ -39,6 +43,14 @@ public class BookBean {
 		this.name = name;
 	}
 
+	public String getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(String author) {
+		this.author = author;
+	}
+
 	public Integer getYearPub() {
 		return yearPub;
 	}
@@ -47,11 +59,11 @@ public class BookBean {
 		this.yearPub = yearPub;
 	}
 
-	public String getGenre() {
+	public Genre getGenre() {
 		return genre;
 	}
 
-	public void setGenre(String genre) {
+	public void setGenre(Genre genre) {
 		this.genre = genre;
 	}
     
