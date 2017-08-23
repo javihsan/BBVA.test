@@ -1,7 +1,8 @@
 'use strict';
-angular
-    .module('test', ['ngRoute'])
-    .config(function ($routeProvider) {
+
+var app = angular.module("test", ['ngRoute','ngTable']);
+
+app.config(function ($routeProvider) {
         $routeProvider
             .when('/', {
                 templateUrl: 'views/list.html',
